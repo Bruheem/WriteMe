@@ -11,6 +11,7 @@ func (app *application) routes() http.Handler {
 
 	// Handler registration to URLs
 	router.HandlerFunc(http.MethodGet, "/", app.home)
+	router.HandlerFunc(http.MethodGet, "/books/:id", app.getBookHandler)
 
 	return router
 }
