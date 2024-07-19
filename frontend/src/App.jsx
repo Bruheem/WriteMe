@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <p>Welcome to the frontend side of WriteMe</p>
+     <h1 className="text-3xl font-bold underline">header text</h1>
     </>
   )
 }
