@@ -34,7 +34,7 @@ func main() {
 	var cfg config
 	flag.IntVar(&cfg.port, "port", 4000, "server network port")
 	flag.StringVar(&cfg.env, "environment", "development", "server environment")
-	flag.StringVar(&cfg.db.dsn, "db-dsn", os.Getenv("WRITEM_DB_DSN"), "PostgreSQL DSN")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", os.Getenv("WRITEME_DB_DSN"), "PostgreSQL DSN")
 	flag.Parse()
 
 	// Define loggers
@@ -46,6 +46,8 @@ func main() {
 		logger.Fatal(err)
 	}
 	defer db.Close()
+
+	logger.Println("database connection pool created")
 
 	app := &application{
 		cfg:    cfg,
