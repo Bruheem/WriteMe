@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Bruheem/WriteMe/internal/data"
 	_ "github.com/lib/pq"
 )
 
@@ -27,6 +28,7 @@ type config struct {
 type application struct {
 	cfg    config
 	logger *log.Logger
+	models data.Models
 }
 
 func main() {
@@ -52,6 +54,7 @@ func main() {
 	app := &application{
 		cfg:    cfg,
 		logger: logger,
+		models: data.NewModel(db),
 	}
 
 	srv := http.Server{

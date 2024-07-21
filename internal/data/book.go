@@ -28,7 +28,11 @@ func (m BookModel) Get(id int64) (*Book, error) {
 }
 
 func (m BookModel) Insert(b *Book) error {
-	return nil
+
+	query := `INSERT INTO book (title, author) VALUES ($1, $2) RETURNING id`
+	args := []interface{}{b.Title, b.Author}
+
+	return m.DB.QueryRow(query, args...).Scan(&b.ID)
 }
 
 func (m BookModel) Update(b *Book) error {

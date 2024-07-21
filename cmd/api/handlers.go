@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/Bruheem/WriteMe/internal/data"
 )
 
 // Page handlers
@@ -22,12 +25,34 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 		app.logger.Println(err)
 		return
 	}
-
 	fmt.Fprintf(w, "Dispalying the %d book", id)
 }
 
 func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "creating your book...")
+
+	var input struct {
+		Title  string
+		Author string
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		fmt.Fprintf(w, "%s", err)
+		return
+	}
+
+	b := &data.Book{
+		Title:  input.Title,
+		Author: input.Author,
+	}
+
+	err = app.models.Books.Insert(b)
+	if err != nil {
+		fmt.Println("Something bad happened:")
+		fmt.Println(err)
+	}
+
+	fmt.Fprint(w, "Book created successfully")
 }
 
 func (app *application) updateBookHandler(w http.ResponseWriter, r *http.Request) {
