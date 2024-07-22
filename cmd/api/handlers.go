@@ -60,7 +60,20 @@ func (app *application) updateBookHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) deleteBookHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "deleting your book...")
+
+	id, err := app.readID(r)
+	if err != nil {
+		fmt.Fprintf(w, "invalid ID requested")
+	}
+
+	err = app.models.Books.Delete(id)
+
+	// needs to be informative
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	} else {
+		fmt.Fprintf(w, "book deleted successfully")
+	}
 }
 
 // User Authentication handlers

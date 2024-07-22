@@ -2,6 +2,7 @@ package data
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 )
 
@@ -39,6 +40,23 @@ func (m BookModel) Update(b *Book) error {
 	return nil
 }
 
-func (m BookModel) Delete(b *Book) error {
+func (m BookModel) Delete(id int64) error {
+
+	query := `DELETE FROM book WHERE id = $1`
+
+	result, err := m.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("no rows were affected in the database!")
+	}
+
 	return nil
 }
