@@ -25,7 +25,21 @@ type BookModel struct {
 }
 
 func (m BookModel) Get(id int64) (*Book, error) {
-	return nil, nil
+
+	var b Book
+	query := `SELECT * FROM book WHERE id = $1`
+
+	err := m.DB.QueryRow(query, id).Scan(
+		&b.ID,
+		&b.Title,
+		&b.Author,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &b, nil
 }
 
 func (m BookModel) Insert(b *Book) error {

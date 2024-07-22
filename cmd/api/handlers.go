@@ -23,9 +23,16 @@ func (app *application) getBookHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readID(r)
 	if err != nil {
 		app.logger.Println(err)
+		fmt.Fprintf(w, "invalid ID requested")
 		return
 	}
-	fmt.Fprintf(w, "Dispalying the %d book", id)
+
+	book, err := app.models.Books.Get(id)
+	if err != nil {
+		fmt.Fprintf(w, "error encountered while fetching")
+	}
+
+	fmt.Fprintf(w, "Title: %s, Author: %s", book.Title, book.Author)
 }
 
 func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request) {
